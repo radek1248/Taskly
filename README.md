@@ -1,1 +1,1 @@
-List to-do jest w wiki
+Lista to-do jest w wiki
