@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TaskModule } from './task/task.module';
 import { ConfigModule } from './config/config.module';
+import { TasksCollectionModule } from './tasks-collection/tasks-collection.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { ConfigModule } from './config/config.module';
     }),
     TaskModule,
     ConfigModule,
+    TasksCollectionModule,
   ],
   controllers: [],
   providers: [],
