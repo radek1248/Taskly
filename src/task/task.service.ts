@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
-import { Repository } from 'typeorm';
+import { FindOneOptions, FindOptionsWhere, Repository } from 'typeorm';
 import { Task } from './task.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -11,24 +11,47 @@ export class TaskService {
     private readonly taskRepository: Repository<Task>,
   ) {}
 
-  async findAll(): Promise<Task[]> {
-    return await this.taskRepository.find();
+  async findAll(collcetionId: string): Promise<Task[]> {
+    return await this.taskRepository.find({
+      where: { Collection_id: collcetionId },
+    });
   }
 
-  async findOne(id: string): Promise<Task> {
-    console.log();
-    return await this.taskRepository.findOne({ where: { Task_id: id } });
+  async findOne(collectionId: string, taskId: string): Promise<Task> {
+    const criteria: FindOneOptions<Task> = {
+      where: { Collection_id: collectionId, Task_id: taskId },
+    };
+    return await this.taskRepository.findOne(criteria);
   }
 
-  async createTask(createTaskDto: CreateTaskDto): Promise<any> {
-    return await this.taskRepository.save(createTaskDto);
+  async createTask(
+    collectionId: string,
+    createTaskDto: CreateTaskDto,
+  ): Promise<any> {
+    const task = {
+      ...createTaskDto,
+      Collection_id: collectionId,
+    };
+    return await this.taskRepository.save(task);
   }
 
-  async updateTask(id: string, createTaskDto: CreateTaskDto): Promise<any> {
-    return await this.taskRepository.update(id, createTaskDto);
+  async updateTask(
+    collectionId: string,
+    taskId: string,
+    createTaskDto: CreateTaskDto,
+  ): Promise<any> {
+    const criteria: FindOptionsWhere<Task> = {
+      Collection_id: collectionId,
+      Task_id: taskId,
+    };
+    return await this.taskRepository.update(criteria, createTaskDto);
   }
 
-  async deleteTask(id: string): Promise<any> {
-    return await this.taskRepository.delete(id);
+  async deleteTask(collectionId: string, taskId: string): Promise<any> {
+    const criteria: FindOptionsWhere<Task> = {
+      Collection_id: collectionId,
+      Task_id: taskId,
+    };
+    return await this.taskRepository.delete(criteria);
   }
 }
