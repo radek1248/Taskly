@@ -12,6 +12,7 @@ import { CreateTasksCollectionDto } from './dto/create-tasks-collection.dto';
 import { CreateTaskDto } from '../task/dto/create-task.dto';
 import { TaskService } from '../task/task.service';
 import { Task } from '../task/task.entity';
+import { UpdateTaskDto } from '../task/dto/update-task.dto';
 
 @Controller('tasks-collection')
 export class TasksCollectionController {
@@ -60,41 +61,33 @@ export class TasksCollectionController {
   }
 
   // TASKS ROUTES
-  @Get(':collectionId/tasks')
-  async getTasks(@Param('collectionId') collectionId: string): Promise<Task[]> {
+  @Get('/:collectionId/tasks')
+  async findAllTasks(
+    @Param('collectionId') collectionId: string,
+  ): Promise<Task[]> {
     return await this.taskSerivce.findAll(collectionId);
   }
 
-  @Get('/:collectionId/tasks/:taskId')
-  async getTask(
-    @Param('collectionId') collectionId: string,
-    @Param('taskId') taskId: string,
-  ): Promise<Task> {
-    return await this.taskSerivce.findOne(collectionId, taskId);
+  @Get('/tasks/:taskId')
+  async findOneTask(@Param('taskId') taskId: string): Promise<Task> {
+    return await this.taskSerivce.findOne(taskId);
   }
 
-  @Post('/:collectionId/add-task')
-  async addTask(
-    @Param('collectionId') collectionId: string,
-    @Body() createTaskDto: CreateTaskDto,
-  ): Promise<CreateTaskDto> {
-    return await this.taskSerivce.createTask(collectionId, createTaskDto);
+  @Post('/tasks')
+  async createTask(@Body() createTaskDto: CreateTaskDto): Promise<Task> {
+    return await this.taskSerivce.createTask(createTaskDto);
   }
 
-  @Patch('/:collectionId/update-task/:taskId')
+  @Patch('/tasks/:taskId')
   async updateTask(
-    @Param('collectionId') collectionId: string,
     @Param('taskId') taskId: string,
-    @Body() taskDto: CreateTaskDto,
-  ): Promise<CreateTaskDto> {
-    return await this.taskSerivce.updateTask(collectionId, taskId, taskDto);
+    @Body() updateTaskDto: UpdateTaskDto,
+  ): Promise<Task> {
+    return await this.taskSerivce.updateTask(taskId, updateTaskDto);
   }
 
-  @Delete('/:collectionId/delete-task/:taskId')
-  async deleteTask(
-    @Param('collectionId') collectionId: string,
-    @Param('taskId') taskId: string,
-  ): Promise<void> {
-    await this.taskSerivce.deleteTask(collectionId, taskId);
+  @Delete('/tasks/:taskId')
+  async deleteTask(@Param('taskId') taskId: string): Promise<void> {
+    await this.taskSerivce.deleteTask(taskId);
   }
 }

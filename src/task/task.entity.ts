@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { TasksCollection } from '../tasks-collection/tasks-collection.entity';
 
 @Entity('Tasks')
 export class Task {
@@ -6,11 +13,16 @@ export class Task {
   Task_id: string;
 
   @Column()
-  Collection_id: string;
-
-  @Column()
   Title: string;
 
   @Column()
   Description: string;
+
+  @ManyToOne(
+    () => TasksCollection,
+    (tasksCollection) => tasksCollection.Tasks,
+    { onDelete: 'CASCADE' },
+  )
+  @JoinColumn({ name: 'Collection_id' })
+  TasksCollection: TasksCollection;
 }
