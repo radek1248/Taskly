@@ -1,22 +1,21 @@
 import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { EntityManager } from 'typeorm';
 import { TasksCollection } from './tasks-collection.entity';
 import { CreateTasksCollectionDto } from './dto/create-tasks-collection.dto';
-import { InjectRepository } from '@nestjs/typeorm';
+import { InjectEntityManager } from '@nestjs/typeorm';
 
 @Injectable()
 export class TasksCollectionService {
   constructor(
-    @InjectRepository(TasksCollection)
-    private readonly tasksCollectionRepository: Repository<TasksCollection>,
+    @InjectEntityManager() private readonly entityManager: EntityManager,
   ) {}
 
   async findAll(): Promise<TasksCollection[]> {
-    return await this.tasksCollectionRepository.find();
+    return await this.entityManager.find(TasksCollection);
   }
 
   async findOne(id: string): Promise<TasksCollection> {
-    return await this.tasksCollectionRepository.findOne({
+    return await this.entityManager.findOne(TasksCollection, {
       where: { Collection_id: id },
     });
   }
@@ -24,17 +23,21 @@ export class TasksCollectionService {
   async createTasksCollection(
     tasksCollectionDto: CreateTasksCollectionDto,
   ): Promise<TasksCollection> {
-    return await this.tasksCollectionRepository.save(tasksCollectionDto);
+    return await this.entityManager.save(TasksCollection, tasksCollectionDto);
   }
 
   async updateTasksCollection(
     id: string,
     tasksCollectionDto: CreateTasksCollectionDto,
   ): Promise<any> {
-    return await this.tasksCollectionRepository.update(id, tasksCollectionDto);
+    return await this.entityManager.update(
+      TasksCollection,
+      id,
+      tasksCollectionDto,
+    );
   }
 
   async deleteTasksCollection(id: string): Promise<void> {
-    await this.tasksCollectionRepository.delete(id);
+    await this.entityManager.delete(TasksCollection, id);
   }
 }
