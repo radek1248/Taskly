@@ -11,11 +11,11 @@ export class TasksCollectionService {
     private readonly tasksCollectionRepository: Repository<TasksCollection>,
   ) {}
 
-  async findAll(): Promise<any> {
+  async findAll(): Promise<TasksCollection[]> {
     return await this.tasksCollectionRepository.find();
   }
 
-  async findOne(id: string): Promise<any> {
+  async findOne(id: string): Promise<TasksCollection> {
     return await this.tasksCollectionRepository.findOne({
       where: { Collection_id: id },
     });
@@ -23,7 +23,7 @@ export class TasksCollectionService {
 
   async createTasksCollection(
     tasksCollectionDto: CreateTasksCollectionDto,
-  ): Promise<any> {
+  ): Promise<TasksCollection> {
     return await this.tasksCollectionRepository.save(tasksCollectionDto);
   }
 

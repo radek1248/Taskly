@@ -5,18 +5,15 @@ import {
   FindManyOptions,
   FindOneOptions,
   FindOptionsWhere,
-  Repository,
 } from 'typeorm';
 import { Task } from './task.entity';
-import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
+import { InjectEntityManager } from '@nestjs/typeorm';
 import { TasksCollection } from '../tasks-collection/tasks-collection.entity';
 import { UpdateTaskDto } from './dto/update-task.dto';
 
 @Injectable()
 export class TaskService {
   constructor(
-    @InjectRepository(Task)
-    private readonly taskRepository: Repository<Task>,
     @InjectEntityManager()
     private readonly entityManager: EntityManager,
   ) {}
@@ -49,7 +46,7 @@ export class TaskService {
     }
   }
 
-  async createTask(createTaskDto: CreateTaskDto): Promise<any> {
+  async createTask(createTaskDto: CreateTaskDto): Promise<Task> {
     try {
       const { Title, Description, Collection_id } = createTaskDto;
 

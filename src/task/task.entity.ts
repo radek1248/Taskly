@@ -6,9 +6,10 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { TasksCollection } from '../tasks-collection/tasks-collection.entity';
+import { TaskInterface } from './task.interface';
 
 @Entity('Tasks')
-export class Task {
+export class Task implements TaskInterface {
   @PrimaryGeneratedColumn('uuid')
   Task_id: string;
 
