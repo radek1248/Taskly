@@ -8,7 +8,7 @@ import {
 import { TasksCollection } from '../tasks-collection/tasks-collection.entity';
 import { TaskInterface } from './task.interface';
 
-@Entity('Tasks')
+@Entity('tasks')
 export class Task implements TaskInterface {
   @PrimaryGeneratedColumn('uuid')
   Task_id: string;

@@ -2,7 +2,7 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Task } from '../task/task.entity';
 import { TasksCollectionInterface } from './tasks-collection.interface';
 
-@Entity('TasksCollections')
+@Entity('tasksCollections')
 export class TasksCollection implements TasksCollectionInterface {
   @PrimaryGeneratedColumn('uuid')
   Collection_id: string;

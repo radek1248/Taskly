@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TaskModule } from './task/task.module';
 import { ConfigModule } from './config/config.module';
 import { TasksCollectionModule } from './tasks-collection/tasks-collection.module';
+import { UserModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { TasksCollectionModule } from './tasks-collection/tasks-collection.modul
     TaskModule,
     ConfigModule,
     TasksCollectionModule,
+    UserModule,
   ],
   controllers: [],
   providers: [],
