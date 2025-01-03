@@ -14,6 +14,7 @@ import { TaskService } from '../task/task.service';
 import { Task } from '../task/task.entity';
 import { UpdateTaskDto } from '../task/dto/update-task.dto';
 import { TasksCollection } from './tasks-collection.entity';
+import { UpdateTasksCollectionDto } from './dto/update-tasks-collection.dto';
 
 @Controller('tasks-collection')
 export class TasksCollectionController {
@@ -44,7 +45,7 @@ export class TasksCollectionController {
   @Patch(':collectionId')
   async updateTasksCollection(
     @Param('collectionId') id: string,
-    @Body() taskCollectionDto: CreateTasksCollectionDto,
+    @Body() taskCollectionDto: UpdateTasksCollectionDto,
   ): Promise<any> {
     return await this.tasksCollectionService.updateTasksCollection(
       id,

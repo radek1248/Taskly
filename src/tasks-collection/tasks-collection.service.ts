@@ -3,6 +3,7 @@ import { EntityManager } from 'typeorm';
 import { TasksCollection } from './tasks-collection.entity';
 import { CreateTasksCollectionDto } from './dto/create-tasks-collection.dto';
 import { InjectEntityManager } from '@nestjs/typeorm';
+import { UpdateTasksCollectionDto } from './dto/update-tasks-collection.dto';
 
 @Injectable()
 export class TasksCollectionService {
@@ -28,7 +29,7 @@ export class TasksCollectionService {
 
   async updateTasksCollection(
     id: string,
-    tasksCollectionDto: CreateTasksCollectionDto,
+    tasksCollectionDto: UpdateTasksCollectionDto,
   ): Promise<any> {
     return await this.entityManager.update(
       TasksCollection,

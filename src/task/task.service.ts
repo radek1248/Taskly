@@ -83,6 +83,7 @@ export class TaskService {
       const criteria: FindOptionsWhere<Task> = {
         Task_id: taskId,
       };
+
       return await this.entityManager.update(Task, criteria, updateTaskDto);
     } catch (error) {
       console.error(`Error occured while updating task: ${error}`);
@@ -95,6 +96,7 @@ export class TaskService {
       const criteria: FindOptionsWhere<Task> = {
         Task_id: taskId,
       };
+
       return await this.entityManager.delete(Task, criteria);
     } catch (error) {
       console.error(`Error occured while deleting task: ${error}`);
