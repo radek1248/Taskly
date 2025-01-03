@@ -5,6 +5,7 @@ import {
   IsString,
   IsUUID,
 } from 'class-validator';
+import { TaskInterface } from '../task.interface';
 
 class TasksCollectionDto {
   @IsNotEmpty()
@@ -12,7 +13,9 @@ class TasksCollectionDto {
   Collection_id: string;
 }
 
-export class UpdateTaskDto {
+export class UpdateTaskDto
+  implements Omit<TaskInterface, 'Task_id' | 'TasksCollection'>
+{
   @IsOptional()
   @IsString()
   Title: string;
