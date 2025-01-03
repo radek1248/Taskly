@@ -56,8 +56,10 @@ export class TasksCollectionController {
   @Delete(':collectionId')
   async deleteTasksCollection(
     @Param('collectionId') collectionId: string,
-  ): Promise<void> {
-    await this.tasksCollectionService.deleteTasksCollection(collectionId);
+  ): Promise<string> {
+    return await this.tasksCollectionService.deleteTasksCollection(
+      collectionId,
+    );
   }
 
   // TASKS ROUTES
@@ -87,7 +89,7 @@ export class TasksCollectionController {
   }
 
   @Delete('/tasks/:taskId')
-  async deleteTask(@Param('taskId') taskId: string): Promise<void> {
-    await this.taskService.deleteTask(taskId);
+  async deleteTask(@Param('taskId') taskId: string): Promise<string> {
+    return await this.taskService.deleteTask(taskId);
   }
 }

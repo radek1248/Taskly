@@ -27,7 +27,7 @@ export class TaskService {
 
       return await this.entityManager.find(Task, criteria);
     } catch (error) {
-      console.error(`Error occured while fetching tasks: ${error}`);
+      console.error(`Failed to fetch all tasks: ${error.message}`);
       return undefined;
     }
   }
@@ -41,7 +41,7 @@ export class TaskService {
 
       return await this.entityManager.findOne(Task, criteria);
     } catch (error) {
-      console.error(`Error occured while fetching task: ${error}`);
+      console.error(`Failed to fetch task ${taskId}: ${error.message}`);
       return undefined;
     }
   }
@@ -73,7 +73,7 @@ export class TaskService {
 
       return await this.entityManager.save(newCollection);
     } catch (error) {
-      console.error(`Error occured while creating task: ${error}`);
+      console.error(`Failed to create task: ${error.message}`);
       return undefined;
     }
   }
@@ -86,20 +86,21 @@ export class TaskService {
 
       return await this.entityManager.update(Task, criteria, updateTaskDto);
     } catch (error) {
-      console.error(`Error occured while updating task: ${error}`);
+      console.error(`Failed to update task ${taskId}: ${error.message}`);
       return undefined;
     }
   }
 
-  async deleteTask(taskId: string): Promise<any> {
+  async deleteTask(taskId: string): Promise<string> {
     try {
       const criteria: FindOptionsWhere<Task> = {
         Task_id: taskId,
       };
 
-      return await this.entityManager.delete(Task, criteria);
+      await this.entityManager.delete(Task, criteria);
+      return 'Task deleted successfully';
     } catch (error) {
-      console.error(`Error occured while deleting task: ${error}`);
+      console.error(`Failed to delete task ${taskId}: ${error}`);
       return undefined;
     }
   }

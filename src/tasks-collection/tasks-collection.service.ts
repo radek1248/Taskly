@@ -12,33 +12,59 @@ export class TasksCollectionService {
   ) {}
 
   async findAll(): Promise<TasksCollection[]> {
-    return await this.entityManager.find(TasksCollection);
+    try {
+      return await this.entityManager.find(TasksCollection);
+    } catch (error) {
+      console.error(`Failed to fetch all tasks-collections: ${error.message}`);
+      return undefined;
+    }
   }
 
   async findOne(id: string): Promise<TasksCollection> {
-    return await this.entityManager.findOne(TasksCollection, {
-      where: { Collection_id: id },
-    });
+    try {
+      const criteria = { where: { Collection_id: id } };
+
+      return await this.entityManager.findOne(TasksCollection, criteria);
+    } catch (error) {
+      console.error(`Failed to fetch task ${id}: ${error.message}`);
+      return undefined;
+    }
   }
 
   async createTasksCollection(
     tasksCollectionDto: CreateTasksCollectionDto,
   ): Promise<TasksCollection> {
-    return await this.entityManager.save(TasksCollection, tasksCollectionDto);
+    try {
+      return await this.entityManager.save(TasksCollection, tasksCollectionDto);
+    } catch (error) {
+      console.error(`Failed to create task collection: ${error.message}`);
+      return undefined;
+    }
   }
 
   async updateTasksCollection(
     id: string,
     tasksCollectionDto: UpdateTasksCollectionDto,
   ): Promise<any> {
-    return await this.entityManager.update(
-      TasksCollection,
-      id,
-      tasksCollectionDto,
-    );
+    try {
+      return await this.entityManager.update(
+        TasksCollection,
+        id,
+        tasksCollectionDto,
+      );
+    } catch (error) {
+      console.error(`Failed to update task collection ${id}: ${error.message}`);
+      return undefined;
+    }
   }
 
-  async deleteTasksCollection(id: string): Promise<void> {
-    await this.entityManager.delete(TasksCollection, id);
+  async deleteTasksCollection(id: string): Promise<string> {
+    try {
+      await this.entityManager.delete(TasksCollection, id);
+      return 'Task collection deleted successfully';
+    } catch (error) {
+      console.error(`Failed to delete task collection ${id}: ${error.message}`);
+      return undefined;
+    }
   }
 }
