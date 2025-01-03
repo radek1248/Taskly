@@ -1,7 +1,7 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Task } from '../task/task.entity';
 
-@Entity('TasksCollection')
+@Entity('TasksCollections')
 export class TasksCollection {
   @PrimaryGeneratedColumn('uuid')
   Collection_id: string;
