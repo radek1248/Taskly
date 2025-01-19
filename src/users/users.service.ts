@@ -3,6 +3,7 @@ import { EntityManager, FindOneOptions } from 'typeorm';
 import { User } from './users.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -32,8 +33,16 @@ export class UserService {
     try {
       const currentDate = new Date();
 
+      const { Password, ...userData } = createUserDto;
+
+      const saltRounds = 11;
+      const hashedPassword = await bcrypt.genSalt(saltRounds).then((salt) => {
+        return bcrypt.hash(Password, salt);
+      });
+
       const user = {
-        ...createUserDto,
+        ...userData,
+        Password: hashedPassword,
         Created_at: currentDate,
         Updated_at: currentDate,
       };
