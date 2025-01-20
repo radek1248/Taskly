@@ -23,14 +23,17 @@ export class TasksCollectionController {
     private readonly taskService: TaskService,
   ) {}
 
-  @Get()
-  async findAll(): Promise<TasksCollection[]> {
-    return await this.tasksCollectionService.findAll();
+  @Get(':userId')
+  async findAll(@Param('userId') userId: string): Promise<TasksCollection[]> {
+    return await this.tasksCollectionService.findAll(userId);
   }
 
-  @Get(':collectionId')
-  async findOne(@Param('collectionId') id: string): Promise<TasksCollection> {
-    return await this.tasksCollectionService.findOne(id);
+  @Get(':userId/:collectionId')
+  async findOne(
+    @Param('userId') userId: string,
+    @Param('collectionId') id: string,
+  ): Promise<TasksCollection> {
+    return await this.tasksCollectionService.findOne(userId, id);
   }
 
   @Post()

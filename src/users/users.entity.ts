@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { UserInterface } from './users.interface';
+import { TasksCollection } from '../tasks-collection/tasks-collection.entity';
 
 @Entity('users')
 export class User implements UserInterface {
@@ -20,4 +21,9 @@ export class User implements UserInterface {
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   Updated_at: Date;
+
+  @OneToMany(() => TasksCollection, (collection) => collection.User, {
+    cascade: true,
+  })
+  TasksCollections: TasksCollection[];
 }

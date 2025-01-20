@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
-import { EntityManager } from 'typeorm';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { EntityManager, FindManyOptions, FindOneOptions } from 'typeorm';
 import { TasksCollection } from './tasks-collection.entity';
 import { CreateTasksCollectionDto } from './dto/create-tasks-collection.dto';
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { UpdateTasksCollectionDto } from './dto/update-tasks-collection.dto';
+import { User } from '../users/users.entity';
 
 @Injectable()
 export class TasksCollectionService {
@@ -11,18 +12,28 @@ export class TasksCollectionService {
     @InjectEntityManager() private readonly entityManager: EntityManager,
   ) {}
 
-  async findAll(): Promise<TasksCollection[]> {
+  async findAll(userId: string): Promise<TasksCollection[]> {
     try {
-      return await this.entityManager.find(TasksCollection);
+      const criteria: FindManyOptions<TasksCollection> = {
+        where: { User: { User_id: userId } },
+        relations: ['User'],
+      };
+      return await this.entityManager.find(TasksCollection, criteria);
     } catch (error) {
       console.error(`Failed to fetch all tasks-collections: ${error.message}`);
       return undefined;
     }
   }
 
-  async findOne(id: string): Promise<TasksCollection> {
+  async findOne(userId: string, id: string): Promise<TasksCollection> {
     try {
-      const criteria = { where: { Collection_id: id } };
+      const criteria: FindOneOptions<TasksCollection> = {
+        where: {
+          User: { User_id: userId },
+          Collection_id: id,
+        },
+        relations: ['User'],
+      };
 
       return await this.entityManager.findOne(TasksCollection, criteria);
     } catch (error) {
@@ -35,7 +46,22 @@ export class TasksCollectionService {
     tasksCollectionDto: CreateTasksCollectionDto,
   ): Promise<TasksCollection> {
     try {
-      return await this.entityManager.save(TasksCollection, tasksCollectionDto);
+      const { User_id, ...restData } = tasksCollectionDto;
+
+      const foundUser = await this.entityManager.findOneBy(User, {
+        User_id: User_id,
+      });
+
+      if (!foundUser) {
+        throw new NotFoundException(`User with id ${User_id} not found`);
+      }
+
+      const user = {
+        User: foundUser,
+        ...restData,
+      };
+
+      return await this.entityManager.save(TasksCollection, user);
     } catch (error) {
       console.error(`Failed to create task collection: ${error.message}`);
       return undefined;
