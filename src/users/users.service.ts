@@ -18,13 +18,13 @@ export class UserService {
     }
   }
 
-  async findOne(userId: string): Promise<User> {
+  async findOne(query: any): Promise<User> {
     try {
-      const criteria: FindOneOptions = { where: { User_id: userId } };
+      const criteria: FindOneOptions = { where: query };
 
       return await this.entityManager.findOne(User, criteria);
     } catch (error) {
-      console.error(`Failed to fetch user ${userId}: ${error.message}`);
+      console.error(`Failed to fetch user: ${error.message}`);
       return undefined;
     }
   }
