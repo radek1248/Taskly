@@ -4,6 +4,9 @@ import { TaskModule } from './task/task.module';
 import { ConfigModule } from './config/config.module';
 import { TasksCollectionModule } from './tasks-collection/tasks-collection.module';
 import { UserModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
+import { AuthGuard } from './auth/auth.guard';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -21,8 +24,14 @@ import { UserModule } from './users/users.module';
     ConfigModule,
     TasksCollectionModule,
     UserModule,
+    AuthModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+  ],
 })
 export class AppModule {}

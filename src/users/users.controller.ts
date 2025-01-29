@@ -11,6 +11,7 @@ import { UserService } from './users.service';
 import { User } from './users.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { Public } from '../auth/auth.constants';
 
 @Controller('users')
 export class UserController {
@@ -26,6 +27,7 @@ export class UserController {
     return await this.userService.findOne(userId);
   }
 
+  @Public()
   @Post()
   async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
     return await this.userService.createUser(createUserDto);
