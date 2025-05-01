@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head><title>User List</title></head>
+<body>
+  <h1>All Users</h1>
+  <ul>
+    {{#each users}}
+      <li>{{this.Name}} - <a href="/users/{{this.Id}}">Details</a></li>
+    {{/each}}
+  </ul>
+  <a href="/users/register">Register New User</a>
+</body>
+</html>

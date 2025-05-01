@@ -1,0 +1,18 @@
+<h2>Collection: {{collection.Title}}</h2>
+
+<h3>Tasks</h3>
+<ul>
+  {{#each collection.Tasks}}
+    <li>
+      <strong>{{Title}}</strong>: {{Description}}
+      <form method="POST" action="/tasks-collection/tasks/{{Task_id}}?_method=DELETE" style="display:inline;">
+        <button type="submit">Delete</button>
+      </form>
+      <a href="/tasks-collection/tasks/{{Task_id}}/edit">Edit</a>
+    </li>
+  {{/each}}
+</ul>
+
+<a href="/tasks-collection/{{collection.Collection_id}}/tasks/new">Add Task</a>
+<br>
+<a href="/tasks-collection/{{collection.User.User_id}}">Back to Collections</a>

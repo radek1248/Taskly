@@ -1,0 +1,68 @@
+<h1>My Task Collections</h1>
+
+<ul>
+  {{#each collections}}
+    <li>
+      <a href='/tasks-collection/{{User.User_id}}/{{Collection_id}}'>
+        {{Title}}
+      </a>
+      <form
+        method='POST'
+        action='/tasks-collection/{{Collection_id}}?_method=DELETE'
+        style='display:inline;'
+      >
+        <button type='submit'>Delete</button>
+      </form>
+    </li>
+  {{/each}}
+  <li id="newCollectionFormContainer" style="display:none;">
+    <form id="newCollectionForm" method="POST" action="/tasks-collection/new">
+      <input
+        type="text"
+        id="newCollectionTitle"
+        name="Title"
+        placeholder="Enter collection name"
+        autofocus
+      />
+      <input
+        type="hidden"
+        name="User_id"
+        value="{{userId}}"
+      />
+      <button type="submit">Save</button>
+      <button type="button" id="cancelNewCollection">Cancel</button>
+    </form>
+  </li>
+</ul>
+
+<button class="newCollectionButton">Create New Collection</button>
+
+<script>
+  document.querySelector('.newCollectionButton').addEventListener('click', function () {
+    const formContainer = document.getElementById('newCollectionFormContainer');
+    formContainer.style.display = 'block';
+    document.getElementById('newCollectionTitle').focus();
+  });
+
+  document.getElementById('cancelNewCollection').addEventListener('click', function () {
+    document.getElementById('newCollectionFormContainer').style.display = 'none';
+    document.getElementById('newCollectionTitle').value = '';
+  });
+
+  document.getElementById('newCollectionForm').addEventListener('submit', function (event) {
+    const title = document.getElementById('newCollectionTitle').value.trim();
+    if (title === '') {
+      event.preventDefault();
+      alert('Please enter a valid collection name.');
+    }
+  });
+
+  document.querySelectorAll('form[action*="_method=DELETE"]').forEach(form => {
+    form.addEventListener('submit', function (event) {
+      if (!confirm('Are you sure you want to delete this collection?')) {
+        event.preventDefault();
+      }
+    });
+  });
+</script>
+
