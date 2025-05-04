@@ -53,13 +53,13 @@ export class TasksCollectionController {
     return { collection };
   }
 
-  @Get(':userId/:collectionId')
-  async findOne(
-    @Param('userId') userId: string,
-    @Param('collectionId') id: string,
-  ): Promise<TasksCollection> {
-    return await this.tasksCollectionService.findOne(userId, id);
-  }
+  // @Get(':userId/:collectionId')
+  // async findOne(
+  //   @Param('userId') userId: string,
+  //   @Param('collectionId') id: string,
+  // ): Promise<TasksCollection> {
+  //   return await this.tasksCollectionService.findOne(userId, id);
+  // }
 
   @Post('new')
   async createTasksCollection(
@@ -89,11 +89,20 @@ export class TasksCollectionController {
   async updateTasksCollection(
     @Param('collectionId') id: string,
     @Body() taskCollectionDto: UpdateTasksCollectionDto,
+    @Res() res: Response,
   ): Promise<any> {
-    return await this.tasksCollectionService.updateTasksCollection(
-      id,
-      taskCollectionDto,
-    );
+    console.log(id, taskCollectionDto);
+    try {
+      await this.tasksCollectionService.updateTasksCollection(
+        id,
+        taskCollectionDto,
+      );
+
+      res.redirect('/tasks-collection/view');
+    } catch (error) {
+      console.error('Error editing collection:', error.message);
+      return { success: false, message: 'Failed to edit collection' };
+    }
   }
 
   @Delete(':collectionId')
@@ -109,8 +118,17 @@ export class TasksCollectionController {
   @Get('/:collectionId/tasks')
   async findAllTasks(
     @Param('collectionId') collectionId: string,
-  ): Promise<Task[]> {
-    return await this.taskService.findAll(collectionId);
+  ): Promise<any> {
+    try {
+      const tasks = await this.taskService.findAll(collectionId);
+      console.log(tasks);
+      return tasks;
+    } catch (error) {
+      console.error(
+        `Error fetching tasks from collection ${collectionId}:`,
+        error.message,
+      );
+    }
   }
 
   @Get('/tasks/:taskId')
@@ -123,24 +141,48 @@ export class TasksCollectionController {
     @Param('collectionId') collectionId: string,
     @Body()
     createTaskDto: CreateTaskWithoutCollectionIdDto,
-  ): Promise<Task> {
-    return await this.taskService.createTask({
-      ...createTaskDto,
-      Collection_id: collectionId,
-    });
+    @Res() res: Response,
+  ): Promise<any> {
+    try {
+      await this.taskService.createTask({
+        ...createTaskDto,
+        Collection_id: collectionId,
+      });
+
+      res.redirect('/tasks-collection/view');
+    } catch (error) {
+      console.error('Error creating new task:', error.message);
+      return { success: false, message: 'Failed to create new task' };
+    }
   }
 
   @Patch('/tasks/:taskId')
   async updateTask(
     @Param('taskId') taskId: string,
     @Body() updateTaskDto: UpdateTaskDto,
-  ): Promise<Task> {
-    return await this.taskService.updateTask(taskId, updateTaskDto);
+    @Res() res: Response,
+  ): Promise<any> {
+    try {
+      await this.taskService.updateTask(taskId, updateTaskDto);
+      res.redirect('/tasks-collection/view');
+    } catch (error) {
+      console.error('Error editing task', error.message);
+      return { success: false, message: 'Failed to edit new task' };
+    }
   }
 
   @Delete('/tasks/:taskId')
-  async deleteTask(@Param('taskId') taskId: string): Promise<string> {
-    return await this.taskService.deleteTask(taskId);
+  async deleteTask(
+    @Param('taskId') taskId: string,
+    @Res() res: Response,
+  ): Promise<any> {
+    try {
+      await this.taskService.deleteTask(taskId);
+      res.redirect('/tasks-collection/view');
+    } catch (error) {
+      console.error('Error editing task', error.message);
+      return { success: false, message: 'Failed to edit new task' };
+    }
   }
 
   private extractUserIdFromToken(req: Request): string {

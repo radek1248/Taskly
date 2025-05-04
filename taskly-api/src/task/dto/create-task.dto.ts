@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsUUID } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
 import { TaskInterface } from '../task.interface';
 
 export class CreateTaskDto
@@ -24,7 +24,7 @@ export class CreateTaskWithoutCollectionIdDto
   @IsString()
   Title: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   Description: string;
 }
