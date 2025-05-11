@@ -9,6 +9,7 @@ import { AuthGuard } from './auth/auth.guard';
 import { JwtService } from '@nestjs/jwt';
 import * as cookieParser from 'cookie-parser';
 import * as methodOverride from 'method-override';
+import * as hbs from 'hbs';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -31,6 +32,10 @@ async function bootstrap() {
 
   app.useStaticAssets(join(__dirname, '..', 'public'));
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
+
+  hbs.registerPartials(join(__dirname, '..', 'views', 'partials'));
+  app.set('view options', { layout: 'layouts/main' });
+
   app.setViewEngine('hbs');
 
   await app.listen(3000);

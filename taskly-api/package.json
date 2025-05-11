@@ -32,6 +32,7 @@
     "class-validator": "^0.14.1",
     "cookie-parser": "^1.4.7",
     "dotenv": "^16.4.7",
+    "flowbite": "^3.1.2",
     "hbs": "^4.2.0",
     "jsonwebtoken": "^9.0.2",
     "method-override": "^3.0.0",

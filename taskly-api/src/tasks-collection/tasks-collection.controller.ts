@@ -17,7 +17,6 @@ import { CreateTaskWithoutCollectionIdDto } from '../task/dto/create-task.dto';
 import { TaskService } from '../task/task.service';
 import { Task } from '../task/task.entity';
 import { UpdateTaskDto } from '../task/dto/update-task.dto';
-import { TasksCollection } from './tasks-collection.entity';
 import { UpdateTasksCollectionDto } from './dto/update-tasks-collection.dto';
 import { JwtService } from '@nestjs/jwt';
 import { Response, Request } from 'express';
@@ -70,11 +69,8 @@ export class TasksCollectionController {
     try {
       const userId = this.extractUserIdFromToken(req);
 
-      const title = taskCollectionDto.Title.trim() || 'Untitled Collection';
-
       await this.tasksCollectionService.createTasksCollection({
         ...taskCollectionDto,
-        Title: title,
         User_id: userId,
       });
 
@@ -91,7 +87,7 @@ export class TasksCollectionController {
     @Body() taskCollectionDto: UpdateTasksCollectionDto,
     @Res() res: Response,
   ): Promise<any> {
-    console.log(id, taskCollectionDto);
+    // console.log(id, taskCollectionDto);
     try {
       await this.tasksCollectionService.updateTasksCollection(
         id,
@@ -121,7 +117,7 @@ export class TasksCollectionController {
   ): Promise<any> {
     try {
       const tasks = await this.taskService.findAll(collectionId);
-      console.log(tasks);
+      // console.log(tasks);
       return tasks;
     } catch (error) {
       console.error(
