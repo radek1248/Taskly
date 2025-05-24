@@ -22,7 +22,9 @@ export class UserController {
   @Get('register')
   @Render('users/register')
   getRegisterPage(): object {
-    return {};
+    return {
+      noScroll: true,
+    };
   }
 
   @Post('register')

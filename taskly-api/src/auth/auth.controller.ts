@@ -11,7 +11,9 @@ export class AuthController {
   @Public()
   @Render('users/login')
   getLoginPage(): object {
-    return {};
+    return {
+      noScroll: true,
+    };
   }
 
   @Post('login')

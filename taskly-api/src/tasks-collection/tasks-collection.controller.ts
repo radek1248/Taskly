@@ -79,7 +79,6 @@ export class TasksCollectionController {
     @Body() taskCollectionDto: UpdateTasksCollectionDto,
     @Res() res: Response,
   ): Promise<any> {
-    // console.log(id, taskCollectionDto);
     try {
       await this.tasksCollectionService.updateTasksCollection(
         id,

@@ -41,12 +41,9 @@ export class AuthGuard implements CanActivate {
       });
 
       request['user'] = payload;
-
-      // console.log(request['user']);
     } catch (error) {
       throw new UnauthorizedException('Invalid token');
     }
-    // console.log('jfldks');
     return true;
   }
 
