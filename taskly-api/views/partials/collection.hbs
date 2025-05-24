@@ -1,63 +1,143 @@
-<div class="collection relative mb-4">
+<div class='collection relative mb-4'>
   <!-- Edit Form -->
-  <form class="edit-form mt-2 hidden w-80 flex flex-row justify-between p-4" method="POST" action="/tasks-collection/{{Collection_id}}?_method=PATCH">
-    <div class="flex flex-row gap-4 w-80">
-      <input type="text" name="Title" value="{{Title}}" required placeholder="Title" class='w-80 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500' />
-      <input type="text" name="Description" value="{{Description}}" placeholder="Description" class="w-80 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" />
+  <form
+    class='edit-form mt-2 hidden w-80 flex flex-row justify-between p-4'
+    method='POST'
+    action='/tasks-collection/{{Collection_id}}?_method=PATCH'
+  >
+    <div class='flex flex-row gap-4 w-80'>
+      <input
+        type='text'
+        name='Title'
+        value='{{Title}}'
+        required
+        placeholder='Title'
+        class='w-80 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500'
+      />
+      <input
+        type='text'
+        name='Description'
+        value='{{Description}}'
+        placeholder='Description'
+        class='w-80 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500'
+      />
     </div>
-    <div class="flex justify-end gap-2">
-      <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none transition duration-200">
+    <div class='flex justify-end gap-2'>
+      <button
+        type='submit'
+        class='bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none transition duration-200'
+      >
         Save
       </button>
-      <button type="button" class="cancel-edit-button px-4 py-2 text-gray-600 hover:text-gray-800 focus:outline-none">
+      <button
+        type='button'
+        class='cancel-edit-button px-4 py-2 text-gray-600 hover:text-gray-800 focus:outline-none'
+      >
         Cancel
       </button>
     </div>
   </form>
 
-  <div class="collection-display flex flex-row items-start justify-between p-4 bg-white shadow-lg rounded-lg hover:shadow-xl transition duration-300" data-id="{{Collection_id}}">
-    <div class="flex flex-col max-w-[90%]">
-      <span class="collection-title text-lg font-semibold text-gray-800 break-words" data-id="{{Collection_id}}">{{Title}}</span>
-      <span class="collection-description text-sm text-gray-600 mt-1 break-words" data-id="{{Collection_id}}">{{Description}}</span>
+  <div
+    class='collection-display flex flex-row items-start justify-between p-4 bg-white shadow-lg rounded-lg hover:shadow-xl transition duration-300'
+    data-id='{{Collection_id}}'
+  >
+    <div class='flex flex-col max-w-[90%]'>
+      <span
+        class='collection-title text-lg font-semibold text-gray-800 break-words'
+        data-id='{{Collection_id}}'
+      >{{Title}}</span>
+      <span
+        class='collection-description text-sm text-gray-600 mt-1 break-words'
+        data-id='{{Collection_id}}'
+      >{{Description}}</span>
     </div>
 
-    <div class="flex flex-row items-center justify-center gap-4">
+    <div class='flex flex-row items-center justify-center gap-4'>
       <!-- Add Task Button -->
-      <button class="show-task-form-button bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-600 focus:outline-none transition duration-200 w-fit h-fit" data-id="{{Collection_id}}">
-        + 
+      <button
+        class='show-task-form-button bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-600 focus:outline-none transition duration-200 w-fit h-fit'
+        data-id='{{Collection_id}}'
+      >
+        +
       </button>
       <!-- Show Tasks Button -->
-      <button class="toggle-tasks-button bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 focus:outline-none transition duration-200 w-fit" data-id="{{Collection_id}}">
+      <button
+        class='toggle-tasks-button bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 focus:outline-none transition duration-200 w-fit'
+        data-id='{{Collection_id}}'
+      >
         Show
       </button>
 
       <!-- Options Button -->
-      <button class="options-button text-gray-600 hover:text-gray-800 focus:outline-none px-2 py-1 transition duration-150">
+      <button
+        class='options-button text-gray-600 hover:text-gray-800 focus:outline-none px-2 py-1 transition duration-150'
+      >
         ⋯
       </button>
-      <div class="options-menu absolute right-0 w-25 bg-white border border-gray-300 rounded-lg shadow-lg p-1 z-10 hidden">
-        <button class="edit-button w-full text-left px-2 py-1 text-blue-500 hover:bg-blue-100 rounded-md" data-id="{{Collection_id}}">Edit</button>
-        <button class="delete-button w-full text-left px-2 py-1 text-red-500 hover:bg-red-100 rounded-md" data-id="{{Collection_id}}" style="color: red;">Delete</button>
+      <div
+        class='options-menu absolute right-0 w-25 bg-white border border-gray-300 rounded-lg shadow-lg p-1 z-10 hidden'
+      >
+        <button
+          class='edit-button w-full text-left px-2 py-1 text-blue-500 hover:bg-blue-100 rounded-md'
+          data-id='{{Collection_id}}'
+        >Edit</button>
+        <button
+          class='delete-button w-full text-left px-2 py-1 text-red-500 hover:bg-red-100 rounded-md'
+          data-id='{{Collection_id}}'
+          style='color: red;'
+        >Delete</button>
       </div>
     </div>
   </div>
 
-  
-
   <!-- Show Tasks List  -->
-  <div class="tasks-list mt-2 ml-4 hidden" data-id="{{Collection_id}}"></div>
+  <div class='tasks-list mt-2 ml-4 hidden' data-id='{{Collection_id}}'></div>
 
   <!-- New Task Form -->
-  <form class="new-task-form mt-2 hidden flex justify-between p-4" data-id="{{Collection_id}}" method="POST" action="/tasks-collection/{{Collection_id}}/tasks">
-    <div class="flex gap-4">
-      <input type="text" name="Title" placeholder="Task title" required class="w-80 p-2 border border-gray-300 rounded-md mb-2 focus:ring-2 focus:ring-blue-500" />
-      <input type="text" name="Description" placeholder="Task description" class="w-80 p-2 border border-gray-300 rounded-md mb-2 focus:ring-2 focus:ring-blue-500" />
+  <form
+    class='new-task-form mt-2 hidden flex justify-between p-4'
+    data-id='{{Collection_id}}'
+    method='POST'
+    action='/tasks-collection/{{Collection_id}}/tasks'
+  >
+    <div class='flex gap-4'>
+      <input
+        type='text'
+        name='Title'
+        placeholder='Task title'
+        required
+        class='w-80 p-2 border border-gray-300 rounded-md mb-2 focus:ring-2 focus:ring-blue-500'
+      />
+      <input
+        type='text'
+        name='Description'
+        placeholder='Task description'
+        class='w-80 p-2 border border-gray-300 rounded-md mb-2 focus:ring-2 focus:ring-blue-500'
+      />
+      <select
+        name='Priority'
+        class='w-40 p-2 border border-gray-300 rounded-md mb-2 focus:ring-2 focus:ring-blue-500'
+        required
+      >
+        <option value='NONE' selected disabled hidden>Select priority</option>
+        <option value="NONE">None</option>
+        <option value='LOW'>Low</option>
+        <option value='NORMAL'>Normal</option>
+        <option value='HIGH'>High</option>
+      </select>
     </div>
-    <div class="flex justify-end space-x-2">
-      <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none transition duration-200">
+    <div class='flex justify-end space-x-2'>
+      <button
+        type='submit'
+        class='bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none transition duration-200'
+      >
         Save
       </button>
-      <button type="button" class="cancel-task-button text-gray-600 hover:text-gray-800 focus:outline-none px-4 py-2">
+      <button
+        type='button'
+        class='cancel-task-button text-gray-600 hover:text-gray-800 focus:outline-none px-4 py-2'
+      >
         Cancel
       </button>
     </div>

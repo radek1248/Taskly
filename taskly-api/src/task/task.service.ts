@@ -48,7 +48,7 @@ export class TaskService {
 
   async createTask(createTaskDto: CreateTaskDto): Promise<Task> {
     try {
-      const { Title, Description, Collection_id } = createTaskDto;
+      const { Title, Description, Collection_id, Priority } = createTaskDto;
 
       const parentCollection = await this.entityManager.findOneBy(
         TasksCollection,
@@ -66,6 +66,7 @@ export class TaskService {
       const task = this.entityManager.create(Task, {
         Title,
         Description,
+        Priority,
         TasksCollection: parentCollection,
       });
 

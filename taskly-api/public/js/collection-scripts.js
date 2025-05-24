@@ -50,38 +50,65 @@ document.querySelectorAll('.toggle-tasks-button').forEach((button) => {
                     <div class="task-display flex items-start justify-between bg-white shadow-md rounded-xl p-4 hover:shadow-lg transition duration-300" data-task-id='${task.Task_id}'>
                       <div class="flex flex-col flex-grow max-w-[calc(100%-2.5rem)]">
                         <h2 class="task-title text-lg font-semibold text-gray-800 break-words">${task.Title}</h2>
-                        <span class="task-desc text-sm text-gray-600 mt-1 break-words min-h-[1rem]">${task.Description || ''}</span>
+                        <span class="task-desc text-sm text-gray-600 mt-1 break-words min-h-[1rem]">
+                          ${task.Description || ''}
+                        </span>
+                        ${
+                          task.Priority !== 'NONE'
+                            ? `
+                              <span class="task-priority text-xs mt-1 italic inline-block px-2 py-0.5 rounded-full bg-gray-100 mr-4 ${
+                                task.Priority === 'LOW'
+                                  ? 'text-gray-600'
+                                  : task.Priority === 'NORMAL'
+                                    ? 'text-blue-600'
+                                    : task.Priority === 'HIGH'
+                                      ? 'text-red-600'
+                                      : ''
+                              }">
+                                Priority: ${task.Priority.charAt(0) + task.Priority.slice(1).toLowerCase()}
+                              </span>
+                            `
+                            : ''
+                        }
                       </div>
                       <button
-                        class="delete-task-button text-red-500 text-center hover:text-red-700 transition duration-200 mr-2 mt-1 shrink-0"
+                        class="delete-task-button text-red-500 text-center self-center hover:text-red-700 transition duration-200 mr-2 mt-1 shrink-0"
                         data-task-id='${task.Task_id}'
                         aria-label="Delete task"
                       >🗑️</button>
                     </div>
 
-
                     <form
-                      class="task-edit-form mt-2 hidden bg-gray-50 flex justify-between p-4 rounded-lg shadow-inner space-y-2"
+                      class="task-edit-form mt-2 hidden bg-gray-50 flex flex-col gap-4 p-4 rounded-lg shadow-inner"
                       data-task-id='${task.Task_id}'
                       method='POST'
                       action='/tasks-collection/tasks/${task.Task_id}?_method=PATCH'
                     >
                       <div class="flex gap-4">
-                      <input
-                        type='text'
-                        name='Title'
-                        value='${task.Title}'
-                        required
-                        class="w-80 border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                        placeholder="Task title"
-                      />
-                      <input
-                        type='text'
-                        name='Description'
-                        value="${task.Description || ''}"
-                        class="w-80 border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                        placeholder="Description (optional)"
-                      />
+                        <input
+                          type='text'
+                          name='Title'
+                          value='${task.Title}'
+                          required
+                          class="w-80 border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                          placeholder="Task title"
+                        />
+                        <input
+                          type='text'
+                          name='Description'
+                          value="${task.Description || ''}"
+                          class="w-80 border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                          placeholder="Description (optional)"
+                        />
+                        <select
+                          name="Priority"
+                          class="border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        >
+                          <option value="NONE" ${task.Priority === 'NONE' ? 'selected' : ''}>None</option>
+                          <option value="LOW" ${task.Priority === 'LOW' ? 'selected' : ''}>Low</option>
+                          <option value="NORMAL" ${task.Priority === 'NORMAL' ? 'selected' : ''}>Normal</option>
+                          <option value="HIGH" ${task.Priority === 'HIGH' ? 'selected' : ''}>High</option>
+                        </select>
                       </div>
                       <div class="flex justify-end space-x-2">
                         <button
@@ -168,7 +195,6 @@ document.querySelectorAll('.cancel-edit-button').forEach((button) => {
 document.querySelectorAll('.delete-button').forEach((button) => {
   button.addEventListener('click', async function () {
     const collectionId = this.getAttribute('data-id');
-    if (!confirm('Are you sure you want to delete this collection?')) return;
 
     try {
       const response = await fetch(`/tasks-collection/${collectionId}`, {

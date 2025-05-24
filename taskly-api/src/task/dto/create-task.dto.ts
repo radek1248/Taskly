@@ -1,5 +1,18 @@
-import { IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
+import {
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUUID,
+} from 'class-validator';
 import { TaskInterface } from '../task.interface';
+
+export enum Priority {
+  low = 'LOW',
+  normal = 'NORMAL',
+  high = 'HIGH',
+  none = 'NONE',
+}
 
 export class CreateTaskDto
   implements Omit<TaskInterface, 'Task_id' | 'TasksCollection'>
@@ -15,6 +28,10 @@ export class CreateTaskDto
   @IsNotEmpty()
   @IsString()
   Description: string;
+
+  @IsOptional()
+  @IsEnum(Priority)
+  Priority: Priority;
 }
 
 export class CreateTaskWithoutCollectionIdDto
@@ -27,4 +44,8 @@ export class CreateTaskWithoutCollectionIdDto
   @IsOptional()
   @IsString()
   Description: string;
+
+  @IsOptional()
+  @IsEnum(Priority)
+  Priority: Priority;
 }
