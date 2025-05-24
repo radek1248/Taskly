@@ -6,9 +6,13 @@
   <link rel="stylesheet" href="./../style/style.css">
   <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="min-h-screen flex flex-col">
-  {{> navbar}}
-  {{{body}}}
-  {{> footer}}
+<body class="h-screen">
+  <div class="min-h-screen flex flex-col">
+    {{> navbar}}
+    <div class="flex-1 overflow-y-auto">
+      {{{body}}}  
+    </div>
+    {{> footer}}
+  </div>
 </body>
 </html>

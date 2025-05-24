@@ -27,7 +27,7 @@ export class UserController {
 
   @Post('register')
   @Public()
-  @Redirect('/users')
+  @Redirect('/auth/login')
   async createUser(@Body() createUserDto: CreateUserDto) {
     return await this.userService.createUser(createUserDto);
   }
