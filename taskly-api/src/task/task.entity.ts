@@ -23,6 +23,9 @@ export class Task implements TaskInterface {
   @Column({ default: Priority.normal })
   Priority: Priority;
 
+  @Column({ default: null })
+  DueDate: Date;
+
   @ManyToOne(
     () => TasksCollection,
     (tasksCollection) => tasksCollection.Tasks,

@@ -52,14 +52,6 @@ export class TasksCollectionController {
     return { collection };
   }
 
-  // @Get(':userId/:collectionId')
-  // async findOne(
-  //   @Param('userId') userId: string,
-  //   @Param('collectionId') id: string,
-  // ): Promise<TasksCollection> {
-  //   return await this.tasksCollectionService.findOne(userId, id);
-  // }
-
   @Post('new')
   async createTasksCollection(
     @Body() taskCollectionDto: CreateTasksCollectionDto,

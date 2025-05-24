@@ -6,5 +6,6 @@ export interface TaskInterface {
   Title: string;
   Description: string;
   Priority: Priority;
+  DueDate: Date;
   TasksCollection: TasksCollectionInterface;
 }

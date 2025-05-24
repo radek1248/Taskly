@@ -44,38 +44,66 @@ document.querySelectorAll('.toggle-tasks-button').forEach((button) => {
 
         taskList.innerHTML = tasks.length
           ? tasks
-              .map(
-                (task) => `
+              .map((task) => {
+                return `
                   <div data-task-id='${task.Task_id}' class="mb-4">
-                    <div class="task-display flex items-start justify-between bg-white shadow-md rounded-xl p-4 hover:shadow-lg transition duration-300" data-task-id='${task.Task_id}'>
-                      <div class="flex flex-col flex-grow max-w-[calc(100%-2.5rem)]">
-                        <h2 class="task-title text-lg font-semibold text-gray-800 break-words">${task.Title}</h2>
-                        <span class="task-desc text-sm text-gray-600 mt-1 break-words min-h-[1rem]">
-                          ${task.Description || ''}
-                        </span>
-                        ${
-                          task.Priority !== 'NONE'
-                            ? `
-                              <span class="task-priority text-xs mt-1 italic inline-block px-2 py-0.5 rounded-full bg-gray-100 mr-4 ${
-                                task.Priority === 'LOW'
-                                  ? 'text-gray-600'
-                                  : task.Priority === 'NORMAL'
-                                    ? 'text-blue-600'
-                                    : task.Priority === 'HIGH'
-                                      ? 'text-red-600'
-                                      : ''
-                              }">
-                                Priority: ${task.Priority.charAt(0) + task.Priority.slice(1).toLowerCase()}
-                              </span>
-                            `
-                            : ''
-                        }
+                    <div class="bg-white shadow-md rounded-xl p-4 hover:shadow-lg transition duration-300 task-display" data-task-id='${task.Task_id}'>
+                      <div class="flex flex-row w-full justify-between gap-3">
+                        <div class="flex flex-col w-full">
+                          <div class="flex justify-between items-start">
+                            <h2 class="task-title text-lg font-semibold text-gray-800 break-words max-w-[75%]">
+                              ${task.Title}
+                            </h2>
+                            ${
+                              task.DueDate
+                                ? `
+                                <span class="text-xs font-medium whitespace-nowrap px-2 py-0.5 rounded bg-gray-100 ${(() => {
+                                  const due = new Date(task.DueDate);
+                                  const now = new Date();
+                                  due.setHours(0, 0, 0, 0);
+                                  now.setHours(0, 0, 0, 0);
+                                  return due < now
+                                    ? 'text-red-600'
+                                    : 'text-blue-600';
+                                })()}">
+                                  Due: ${new Date(task.DueDate).toLocaleDateString()}
+                                </span>
+                              `
+                                : ''
+                            }
+                          </div>
+
+                          <span class="task-desc text-sm text-gray-600 mt-1 break-words min-h-[1rem] block">
+                            ${task.Description || ''}
+                          </span>
+                          <div class="flex">
+                            ${
+                              task.Priority !== 'NONE'
+                                ? `
+                                  <span class="task-priority text-xs mt-2 italic inline-block px-2 py-0.5 rounded-full bg-gray-100 w-fit ${
+                                    task.Priority === 'LOW'
+                                      ? 'text-gray-600'
+                                      : task.Priority === 'NORMAL'
+                                        ? 'text-blue-600'
+                                        : task.Priority === 'HIGH'
+                                          ? 'text-red-600'
+                                          : ''
+                                  }">
+                                    Priority: ${task.Priority.charAt(0) + task.Priority.slice(1).toLowerCase()}
+                                  </span>
+                                `
+                                : ''
+                            }
+                          </div>
+                        </div>
+                        <div class="flex justify-end">
+                          <button
+                            class="delete-task-button text-red-500 text-center hover:text-red-700 transition duration-200"
+                            data-task-id='${task.Task_id}'
+                            aria-label="Delete task"
+                          >🗑️</button>
+                        </div>
                       </div>
-                      <button
-                        class="delete-task-button text-red-500 text-center self-center hover:text-red-700 transition duration-200 mr-2 mt-1 shrink-0"
-                        data-task-id='${task.Task_id}'
-                        aria-label="Delete task"
-                      >🗑️</button>
                     </div>
 
                     <form
@@ -84,7 +112,7 @@ document.querySelectorAll('.toggle-tasks-button').forEach((button) => {
                       method='POST'
                       action='/tasks-collection/tasks/${task.Task_id}?_method=PATCH'
                     >
-                      <div class="flex gap-4">
+                      <div class="flex flex-wrap gap-4">
                         <input
                           type='text'
                           name='Title'
@@ -109,8 +137,14 @@ document.querySelectorAll('.toggle-tasks-button').forEach((button) => {
                           <option value="NORMAL" ${task.Priority === 'NORMAL' ? 'selected' : ''}>Normal</option>
                           <option value="HIGH" ${task.Priority === 'HIGH' ? 'selected' : ''}>High</option>
                         </select>
+                        <input
+                          type="date"
+                          name="DueDate"
+                          value="${task.DueDate ? task.DueDate.split('T')[0] : null}"
+                          class="border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        />
                       </div>
-                      <div class="flex justify-end space-x-2">
+                      <div class="flex justify-end space-x-2 mt-3">
                         <button
                           type='submit'
                           class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200"
@@ -126,8 +160,8 @@ document.querySelectorAll('.toggle-tasks-button').forEach((button) => {
                       </div>
                     </form>
                   </div>
-                `,
-              )
+                `;
+              })
               .join('')
           : `<span>There aren't any tasks.</span>`;
       } catch (error) {

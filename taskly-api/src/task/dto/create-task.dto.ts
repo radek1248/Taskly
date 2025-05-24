@@ -32,6 +32,9 @@ export class CreateTaskDto
   @IsOptional()
   @IsEnum(Priority)
   Priority: Priority;
+
+  @IsOptional()
+  DueDate: Date;
 }
 
 export class CreateTaskWithoutCollectionIdDto
@@ -48,4 +51,7 @@ export class CreateTaskWithoutCollectionIdDto
   @IsOptional()
   @IsEnum(Priority)
   Priority: Priority;
+
+  @IsOptional()
+  DueDate: Date;
 }

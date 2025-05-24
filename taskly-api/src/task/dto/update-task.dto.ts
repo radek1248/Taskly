@@ -31,6 +31,9 @@ export class UpdateTaskDto
   Priority: Priority;
 
   @IsOptional()
+  DueDate: Date;
+
+  @IsOptional()
   @IsObject()
   TasksCollection: TasksCollectionDto;
 }
