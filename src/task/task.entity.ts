@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { TasksCollection } from '../tasks-collection/tasks-collection.entity';
 import { TaskInterface } from './task.interface';
+import { Priority } from './dto/create-task.dto';
 
 @Entity('tasks')
 export class Task implements TaskInterface {
@@ -19,10 +20,18 @@ export class Task implements TaskInterface {
   @Column()
   Description: string;
 
+  @Column({ default: Priority.normal })
+  Priority: Priority;
+
+  @Column({ default: null })
+  DueDate: Date;
+
   @ManyToOne(
     () => TasksCollection,
     (tasksCollection) => tasksCollection.Tasks,
-    { onDelete: 'CASCADE' },
+    {
+      onDelete: 'CASCADE',
+    },
   )
   @JoinColumn({ name: 'Collection_id' })
   TasksCollection: TasksCollection;

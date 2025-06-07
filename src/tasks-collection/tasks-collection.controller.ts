@@ -6,54 +6,90 @@ import {
   Param,
   Patch,
   Post,
+  Render,
+  Req,
+  Res,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { TasksCollectionService } from './tasks-collection.service';
 import { CreateTasksCollectionDto } from './dto/create-tasks-collection.dto';
-import { CreateTaskDto } from '../task/dto/create-task.dto';
+import { CreateTaskWithoutCollectionIdDto } from '../task/dto/create-task.dto';
 import { TaskService } from '../task/task.service';
 import { Task } from '../task/task.entity';
 import { UpdateTaskDto } from '../task/dto/update-task.dto';
-import { TasksCollection } from './tasks-collection.entity';
 import { UpdateTasksCollectionDto } from './dto/update-tasks-collection.dto';
+import { JwtService } from '@nestjs/jwt';
+import { Response, Request } from 'express';
 
 @Controller('tasks-collection')
 export class TasksCollectionController {
   constructor(
     private readonly tasksCollectionService: TasksCollectionService,
     private readonly taskService: TaskService,
+    private readonly jwtService: JwtService,
   ) {}
 
-  @Get(':userId')
-  async findAll(@Param('userId') userId: string): Promise<TasksCollection[]> {
-    return await this.tasksCollectionService.findAll(userId);
+  @Get('view')
+  @Render('tasks-collections/index')
+  async renderCollectionsPage(@Req() req: Request) {
+    const userId = this.extractUserIdFromToken(req);
+    const collections = await this.tasksCollectionService.findAll(userId);
+    return { collections, userId };
   }
 
-  @Get(':userId/:collectionId')
-  async findOne(
+  @Get(':userId/:collectionId/view')
+  @Render('tasks-collections/detail')
+  async renderSingleCollectionPage(
     @Param('userId') userId: string,
-    @Param('collectionId') id: string,
-  ): Promise<TasksCollection> {
-    return await this.tasksCollectionService.findOne(userId, id);
+    @Param('collectionId') collectionId: string,
+  ) {
+    const collection = await this.tasksCollectionService.findOne(
+      userId,
+      collectionId,
+    );
+    const tasks = await this.taskService.findAll(collectionId);
+    collection.Tasks = tasks;
+    return { collection };
   }
 
-  @Post()
+  @Post('new')
   async createTasksCollection(
     @Body() taskCollectionDto: CreateTasksCollectionDto,
-  ): Promise<TasksCollection> {
-    return await this.tasksCollectionService.createTasksCollection(
-      taskCollectionDto,
-    );
+    @Res() res: Response,
+    @Req() req: Request,
+  ): Promise<any> {
+    try {
+      const userId = this.extractUserIdFromToken(req);
+
+      await this.tasksCollectionService.createTasksCollection({
+        ...taskCollectionDto,
+        User_id: userId,
+      });
+
+      res.redirect('/tasks-collection/view');
+    } catch (error) {
+      console.error('Error creating collection:', error.message);
+      return { success: false, message: 'Failed to create collection' };
+    }
   }
 
   @Patch(':collectionId')
   async updateTasksCollection(
     @Param('collectionId') id: string,
     @Body() taskCollectionDto: UpdateTasksCollectionDto,
+    @Res() res: Response,
   ): Promise<any> {
-    return await this.tasksCollectionService.updateTasksCollection(
-      id,
-      taskCollectionDto,
-    );
+    try {
+      await this.tasksCollectionService.updateTasksCollection(
+        id,
+        taskCollectionDto,
+      );
+
+      res.redirect('/tasks-collection/view');
+    } catch (error) {
+      console.error('Error editing collection:', error.message);
+      return { success: false, message: 'Failed to edit collection' };
+    }
   }
 
   @Delete(':collectionId')
@@ -69,8 +105,16 @@ export class TasksCollectionController {
   @Get('/:collectionId/tasks')
   async findAllTasks(
     @Param('collectionId') collectionId: string,
-  ): Promise<Task[]> {
-    return await this.taskService.findAll(collectionId);
+  ): Promise<any> {
+    try {
+      const tasks = await this.taskService.findAll(collectionId);
+      return tasks;
+    } catch (error) {
+      console.error(
+        `Error fetching tasks from collection ${collectionId}:`,
+        error.message,
+      );
+    }
   }
 
   @Get('/tasks/:taskId')
@@ -78,21 +122,70 @@ export class TasksCollectionController {
     return await this.taskService.findOne(taskId);
   }
 
-  @Post('/tasks')
-  async createTask(@Body() createTaskDto: CreateTaskDto): Promise<Task> {
-    return await this.taskService.createTask(createTaskDto);
+  @Post('/:collectionId/tasks')
+  async createTask(
+    @Param('collectionId') collectionId: string,
+    @Body()
+    createTaskDto: CreateTaskWithoutCollectionIdDto,
+    @Res() res: Response,
+  ): Promise<any> {
+    try {
+      await this.taskService.createTask({
+        ...createTaskDto,
+        Collection_id: collectionId,
+      });
+
+      res.redirect('/tasks-collection/view');
+    } catch (error) {
+      console.error('Error creating new task:', error.message);
+      return { success: false, message: 'Failed to create new task' };
+    }
   }
 
   @Patch('/tasks/:taskId')
   async updateTask(
     @Param('taskId') taskId: string,
     @Body() updateTaskDto: UpdateTaskDto,
-  ): Promise<Task> {
-    return await this.taskService.updateTask(taskId, updateTaskDto);
+    @Res() res: Response,
+  ): Promise<any> {
+    try {
+      await this.taskService.updateTask(taskId, updateTaskDto);
+      res.redirect('/tasks-collection/view');
+    } catch (error) {
+      console.error('Error editing task', error.message);
+      return { success: false, message: 'Failed to edit new task' };
+    }
   }
 
   @Delete('/tasks/:taskId')
-  async deleteTask(@Param('taskId') taskId: string): Promise<string> {
-    return await this.taskService.deleteTask(taskId);
+  async deleteTask(
+    @Param('taskId') taskId: string,
+    @Res() res: Response,
+  ): Promise<any> {
+    try {
+      await this.taskService.deleteTask(taskId);
+      res.redirect('/tasks-collection/view');
+    } catch (error) {
+      console.error('Error editing task', error.message);
+      return { success: false, message: 'Failed to edit new task' };
+    }
+  }
+
+  private extractUserIdFromToken(req: Request): string {
+    const token = req.cookies?.Authorization?.replace('Bearer ', '');
+
+    if (!token) {
+      throw new UnauthorizedException('Missing token');
+    }
+
+    try {
+      const payload = this.jwtService.verify(token, {
+        secret: process.env.SECRET_KEY,
+      });
+
+      return payload.sub;
+    } catch (e) {
+      throw new UnauthorizedException('Invalid token');
+    }
   }
 }

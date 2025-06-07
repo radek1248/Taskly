@@ -22,6 +22,27 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
+## Description
+
+Taskly API is a task management application built with NestJS that allows users to create and manage task lists collaboratively. The application features user profiles and comprehensive task management with priorities and deadlines.
+
+## Prerequisites
+
+- Node.js (v14 or higher)
+- MySQL database server
+- npm package manager
+
+## Database Setup
+
+This application uses MySQL as the database. Make sure you have MySQL installed and running on your system. Create a database for the application and configure the connection in your environment variables.
+
+## How to Open and Run the Application
+
+1. Clone the repository
+2. Install dependencies
+3. Configure your MySQL database connection
+4. Start the application
+
 ## Installation
 
 ```bash
@@ -35,23 +56,7 @@ $ npm install
 $ npm run start
 
 # watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+$ npm run dev
 ```
 
 ## Support

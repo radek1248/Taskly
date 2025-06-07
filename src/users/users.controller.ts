@@ -6,9 +6,10 @@ import {
   Param,
   Patch,
   Post,
+  Redirect,
+  Render,
 } from '@nestjs/common';
 import { UserService } from './users.service';
-import { User } from './users.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Public } from '../auth/auth.constants';
@@ -17,20 +18,34 @@ import { Public } from '../auth/auth.constants';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @Public()
+  @Get('register')
+  @Render('users/register')
+  getRegisterPage(): object {
+    return {
+      noScroll: true,
+    };
+  }
+
+  @Post('register')
+  @Public()
+  @Redirect('/auth/login')
+  async createUser(@Body() createUserDto: CreateUserDto) {
+    return await this.userService.createUser(createUserDto);
+  }
+
   @Get()
-  async findAll(): Promise<User[]> {
-    return await this.userService.findAll();
+  @Public()
+  @Render('users/index')
+  async findAll(): Promise<object> {
+    return { users: await this.userService.findAll() };
   }
 
   @Get(':userId')
-  async findOne(@Param('userId') userId: string): Promise<User> {
-    return await this.userService.findOne(userId);
-  }
-
-  @Public()
-  @Post()
-  async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
-    return await this.userService.createUser(createUserDto);
+  @Render('users/detail')
+  async findOne(@Param('userId') userId: string): Promise<object> {
+    const user = await this.userService.findOne(userId);
+    return { user };
   }
 
   @Patch(':userId')

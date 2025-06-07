@@ -1,4 +1,5 @@
 import {
+  IsEnum,
   IsNotEmpty,
   IsObject,
   IsOptional,
@@ -6,6 +7,7 @@ import {
   IsUUID,
 } from 'class-validator';
 import { TaskInterface } from '../task.interface';
+import { Priority } from './create-task.dto';
 
 class TasksCollectionDto {
   @IsNotEmpty()
@@ -23,6 +25,13 @@ export class UpdateTaskDto
   @IsOptional()
   @IsString()
   Description: string;
+
+  @IsOptional()
+  @IsEnum(Priority)
+  Priority: Priority;
+
+  @IsOptional()
+  DueDate: Date;
 
   @IsOptional()
   @IsObject()

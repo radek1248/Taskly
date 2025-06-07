@@ -10,27 +10,26 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signIn(
-    username: string,
-    password: string,
-  ): Promise<{ access_token: string }> {
-    try {
-      const user = await this.usersService.findOne({ Name: username });
-      if (!user) {
-        throw new UnauthorizedException();
-      }
+  async generateJwt(user: any): Promise<string> {
+    return this.jwtService.signAsync(
+      { sub: user.User_id, email: user.Email },
+      { secret: process.env.SECRET_KEY },
+    );
+  }
 
-      if (!(await bcrypt.compare(password, user.Password))) {
-        throw new UnauthorizedException();
-      }
-
-      const payload = { sub: user.User_id, username: user.Name };
-      return {
-        access_token: await this.jwtService.signAsync(payload),
-      };
-    } catch (error) {
-      console.error(`Failed to sign in: ${error.message}`);
-      throw new UnauthorizedException();
+  async validateUser(email: string, password: string): Promise<any> {
+    const user = await this.usersService.findOne({ Email: email });
+    if (!user) {
+      throw new UnauthorizedException('Invalid credentials');
     }
+
+    const isPasswordMatch = await bcrypt.compare(password, user.Password);
+    if (!isPasswordMatch) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    const { Password, ...rest } = user;
+    Password;
+    return rest;
   }
 }

@@ -18,7 +18,7 @@ export class TasksCollection implements TasksCollectionInterface {
   @Column()
   Title: string;
 
-  @Column()
+  @Column({ default: '' })
   Description: string;
 
   @ManyToOne(() => User, (user) => user.TasksCollections, {

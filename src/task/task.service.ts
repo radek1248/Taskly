@@ -48,12 +48,12 @@ export class TaskService {
 
   async createTask(createTaskDto: CreateTaskDto): Promise<Task> {
     try {
-      const { Title, Description, Collection_id } = createTaskDto;
+      const { Collection_id } = createTaskDto;
 
       const parentCollection = await this.entityManager.findOneBy(
         TasksCollection,
         {
-          Collection_id: Collection_id,
+          Collection_id,
         },
       );
 
@@ -63,18 +63,15 @@ export class TaskService {
         );
       }
 
-      const task = {
-        Title,
-        Description,
+      const task = this.entityManager.create(Task, {
+        ...createTaskDto,
         TasksCollection: parentCollection,
-      };
+      });
 
-      const newCollection = this.entityManager.create(Task, task);
-
-      return await this.entityManager.save(newCollection);
+      return await this.entityManager.save(task);
     } catch (error) {
       console.error(`Failed to create task: ${error.message}`);
-      return undefined;
+      throw new Error('Internal Server Error while creating task');
     }
   }
 
