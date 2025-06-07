@@ -108,7 +108,6 @@ export class TasksCollectionController {
   ): Promise<any> {
     try {
       const tasks = await this.taskService.findAll(collectionId);
-      console.log(tasks);
       return tasks;
     } catch (error) {
       console.error(

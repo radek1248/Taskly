@@ -184,11 +184,8 @@ document.querySelectorAll('.collection-display').forEach((el) => {
     const container = document
       .querySelector(`.collection-display[data-id="${id}"]`)
       .closest('.collection');
-    console.log(container);
     const editForm = container.querySelector('.edit-form');
     const display = container.querySelector('.collection-display');
-
-    console.log(display);
 
     display.style.display = 'none';
     editForm.style.display = 'block';
@@ -249,8 +246,6 @@ document.querySelectorAll('.delete-button').forEach((button) => {
 document.querySelectorAll('.options-button').forEach((button) => {
   button.addEventListener('click', (e) => {
     const menu = e.target.nextElementSibling;
-    console.log(e.target);
-    console.log(menu);
     menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
   });
 });
