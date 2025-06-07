@@ -24,21 +24,24 @@
 
 ## Description
 
-# Wstępny plan
+Taskly API is a task management application built with NestJS that allows users to create and manage task lists collaboratively. The application features user profiles and comprehensive task management with priorities and deadlines.
 
-## 1. Profil Użytkownika
-- Użytkownik (User) będzie miał wyłącznie proste informacje takie jak: nazwa, email, hasło i zdjęcie profilowe (opcjonalne)
-- Użytkownik będzie miał możliwość stworzenia wielu różnych list z zadaniami
+## Prerequisites
 
-## 2. Informacjie o liście zadań
-- Lista będzie zawierać wiele różnorodnych elementów, takich jak zwykłe zadanie, dalekie plany/większe zadania (milestone)
-- Zawierać będzie tytuł i opis
-- Będzie można podłączyć kilka użytkowników pod jedną listę
+- Node.js (v14 or higher)
+- MySQL database server
+- npm package manager
 
-## 3. Elementy listy
-- Będą zwierać tytuł, opis, poziom priorytetu, datę rozpoczęcia oraz zakończenia, pole na dodanie plików lub zdjęć
-- Będzie można ustawić status wykonania danego zadania
-- Będzie można tworzyć relacje między wybranymi zadaniami
+## Database Setup
+
+This application uses MySQL as the database. Make sure you have MySQL installed and running on your system. Create a database for the application and configure the connection in your environment variables.
+
+## How to Open and Run the Application
+
+1. Clone the repository
+2. Install dependencies
+3. Configure your MySQL database connection
+4. Start the application
 
 ## Installation
 
@@ -53,23 +56,7 @@ $ npm install
 $ npm run start
 
 # watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+$ npm run dev
 ```
 
 ## Support
