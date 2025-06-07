@@ -42,6 +42,7 @@ This application uses MySQL as the database. Make sure you have MySQL installed 
 2. Install dependencies
 3. Configure your MySQL database connection
 4. Start the application
+5. See `localhost:3000`
 
 ## Installation
 
